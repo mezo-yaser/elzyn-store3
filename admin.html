@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ELZYN | لوحة التحكم</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6f5f2;--ink:#0f0f0f;--acc:#ff4c01;--gry:#6b6b6b;--line:#dcdad4;--wa:#25d366}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+/* الشريط العلوي */
+.top{position:sticky;top:0;z-index:5;background:var(--ink);color:#fff;display:flex;align-items:center;gap:14px;padding:10px 16px;flex-wrap:wrap}
+.logo{font-family:'Anton',Impact,sans-serif;letter-spacing:.08em;font-size:1.4rem;direction:ltr}
+.logo small{color:var(--acc);font-size:.75rem;margin-inline-start:8px;letter-spacing:.2em}
+#tabs{display:flex;gap:4px;overflow-x:auto;flex:1}
+#tabs button{padding:6px 14px;color:#bbb;white-space:nowrap;font-weight:600}
+#tabs .on{background:var(--acc);color:#fff}
+.btn{display:inline-block;background:var(--acc);color:#fff;padding:9px 20px;font-weight:700;transition:background .2s}
+.btn:hover{background:var(--ink)}
+.top .btn:hover{background:#fff;color:var(--ink)}
+.btn--wa{background:var(--wa);color:var(--ink)}
+.ghost{border:1.5px solid var(--ink);padding:7px 16px;font-weight:600;margin:6px 0}
+.dng{color:#c0392b;font-weight:600}
+main{max-width:980px;margin:0 auto;padding:22px 16px 70px}
+h3{margin:26px 0 10px;font-size:1.1rem}
+h3:first-child{margin-top:0}
+.mut{color:var(--gry);font-size:.9rem}
+/* لوحة المؤشرات */
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.k{background:#fff;border:1px solid var(--line);padding:16px}
+.k small{color:var(--gry)}
+.k b{display:block;font-size:1.5rem;font-weight:900}
+.bars{display:flex;gap:8px;background:#fff;border:1px solid var(--line);padding:14px}
+.bars>div{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.bw{height:110px;width:100%;display:flex;align-items:flex-end}
+.bars i{display:block;width:100%;background:var(--acc);min-height:2px}
+.bars small{color:var(--gry);font-size:.7rem}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}
+.alert{background:#fff4ee;border:1px solid var(--acc);padding:10px 14px;margin-top:10px}
+/* المنتجات */
+.bar2{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.pr{display:grid;grid-template-columns:72px 1fr;gap:14px;background:#fff;border:1px solid var(--line);padding:10px;margin-bottom:10px}
+.pr.off{opacity:.55}
+.pr img{width:72px;height:96px;object-fit:cover;background:#e4e2dc}
+.pr small{display:block;color:var(--gry)}
+.acts{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.acts button:not(.btn){text-decoration:underline;font-weight:600}
+/* الطلبات */
+.od{background:#fff;border:1px solid var(--line);padding:14px;margin-bottom:10px;display:grid;gap:4px}
+.od select{border:1.5px solid var(--ink);padding:4px 8px;background:var(--bg)}
+details{margin-bottom:18px}
+summary{cursor:pointer;list-style:none;text-align:center}
+/* النماذج */
+.fm{display:grid;gap:12px;margin-top:12px}
+label{display:grid;gap:3px;font-weight:600;font-size:.9rem}
+input,select,textarea{padding:9px 12px;border:1.5px solid var(--ink);background:#fff;width:100%}
+.chk{display:flex;gap:16px;flex-wrap:wrap}
+.chk label{display:flex;align-items:center;gap:6px}
+.chk input{width:auto}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.two3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+dialog{border:0;padding:22px;width:min(540px,94vw);max-height:92vh;overflow:auto;background:var(--bg);margin:auto}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+.steps{padding-inline-start:20px;display:grid;gap:4px;margin-bottom:12px}
+.toast{position:fixed;bottom:22px;right:50%;transform:translate(50%,30px);background:var(--ink);color:#fff;padding:10px 20px;font-weight:600;opacity:0;pointer-events:none;transition:.3s;z-index:20}
+.toast.on{opacity:1;transform:translate(50%,0)}
+@media(max-width:560px){.two3{grid-template-columns:1fr 1fr}.two3 label:first-child{grid-column:span 2}}
+.pvw{display:flex;gap:10px;flex-wrap:wrap}.pvw img{height:96px;border:1px solid var(--line);background:repeating-conic-gradient(#ddd 0 25%,#fff 0 50%) 0 0/14px 14px}
+</style>
+</head>
+<body>
+<header class="top">
+ <b class="logo">ELZYN<small>ADMIN</small></b>
+ <nav id="tabs">
+  <button data-t="dash" class="on">لوحة التحكم</button><button data-t="prod">المنتجات</button><button data-t="ord">الطلبات</button><button data-t="set">الإعدادات</button><button data-t="pub">الحساب</button>
+ </nav>
+ <button class="btn" id="pub">خروج</button>
+</header>
+<main id="v"></main>
+<dialog id="dlg"></dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ===== أدوات عامة ===== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>Math.round(n).toLocaleString('en')+' ج.م';
+const ld=t=>new Date(t-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+let tm;const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tm);tm=setTimeout(()=>t.classList.remove('on'),2200)};
+const dl=(name,text,type)=>{const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:type||'text/plain'}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
+const CAT={tees:'تيشيرتات',hoodies:'هودي',shirts:'قمصان',jackets:'جواكت',pants:'بنطلونات'};
+const ST=['جديد','مؤكد','تم الشحن','تم التسليم','ملغي'];
+const defSz=c=>c==='pants'?['30','32','34','36']:['S','M','L','XL'];
+
+/* ===== الاتصال بالسيرفر ===== */
+let DB={settings:{bar:[]},products:[],orders:[]},ready=false,tab='dash';
+async function api(m,u,b){
+ const r=await fetch(u,{method:m,headers:{'Content-Type':'application/json','X-Requested-With':'ez'},body:b?JSON.stringify(b):undefined});
+ if(r.status===401){login();throw new Error('401')}
+ const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'خطأ');return j;
+}
+const save=()=>api('PUT','/api/admin/catalog',{settings:DB.settings,products:DB.products}).catch(e=>e.message!=='401'&&toast('تعذّر الحفظ: '+e.message));
+function login(){
+ ready=false;
+ $('#v').innerHTML=`<div class="fm" style="max-width:340px;margin:60px auto"><h3>تسجيل الدخول</h3><label>كلمة السر<input id="lp" type="password" autocomplete="current-password"></label><button class="btn" id="lb">دخول</button></div>`;
+ const go=()=>fetch('/api/login',{method:'POST',headers:{'Content-Type':'application/json','X-Requested-With':'ez'},body:JSON.stringify({password:$('#lp').value})}).then(async r=>{if(r.ok)boot();else toast((await r.json().catch(()=>({}))).error||'كلمة السر غلط')});
+ $('#lb').onclick=go;$('#lp').onkeydown=e=>e.key==='Enter'&&go();$('#lp').focus();
+}
+const badge=()=>{const n=DB.orders.filter(o=>o.st==='جديد').length;document.querySelector('[data-t=ord]').textContent=n?`الطلبات (${n})`:'الطلبات'};
+async function boot(){try{DB=await api('GET','/api/admin/state');ready=true;show(tab);badge()}catch(e){}}
+/* متابعة الطلبات الجديدة كل 20 ثانية */
+setInterval(async()=>{if(!ready)return;try{const s=await api('GET','/api/admin/state'),old=DB.orders.length;DB.orders=s.orders;badge();if(s.orders.length>old){toast('وصل طلب جديد 🔔');if(tab==='dash'||(tab==='ord'&&!draft.length&&!$('#on').value))show(tab)}}catch(e){}},20000);
+
+/* ===== 1) لوحة التحكم ===== */
+const kp=(l,v)=>`<div class="k"><small>${l}</small><b>${v}</b></div>`;
+function vDash(){
+ const O=DB.orders.filter(o=>o.st!=='ملغي'),rev=O.reduce((a,o)=>a+o.total,0),top={};
+ O.forEach(o=>o.items.forEach(i=>top[i.n]=(top[i.n]||0)+i.q));
+ const tl=Object.entries(top).sort((a,b)=>b[1]-a[1]).slice(0,5);
+ const days=[...Array(7)].map((_,k)=>{const d=ld(Date.now()-(6-k)*864e5);return[d.slice(5),O.filter(o=>o.date===d).reduce((a,o)=>a+o.total,0)]});
+ const mx=Math.max(1,...days.map(d=>d[1])),out=DB.products.filter(p=>p.out&&p.on).length,nw=DB.orders.filter(o=>o.st==='جديد').length;
+ return `<h3>نظرة عامة</h3><div class="kpi">${kp('إيراد الطلبات',fmt(rev))}${kp('عدد الطلبات',O.length)}${kp('طلبات جديدة',nw)}${kp('متوسط الطلب',fmt(O.length?rev/O.length:0))}</div>
+ ${nw?`<div class="alert">عندك ${nw} طلب جديد محتاج تأكيد.</div>`:''}${out?`<div class="alert">${out} منتج مسجّل "نفد" في المتجر.</div>`:''}
+ <h3>الإيراد آخر 7 أيام</h3><div class="bars">${days.map(([d,v])=>`<div><div class="bw"><i title="${fmt(v)}" style="height:${v/mx*100}%"></i></div><small>${d}</small></div>`).join('')}</div>
+ <h3>الأكثر مبيعاً</h3>${tl.length?tl.map(([n,q])=>`<p class="row"><span>${esc(n)}</span><b>${q} قطعة</b></p>`).join(''):'<p class="mut">لسه مفيش طلبات. سجّل أول طلب من تبويب الطلبات.</p>'}`;
+}
+
+/* ===== 2) المنتجات ===== */
+function vProd(){
+ return `<div class="bar2"><button class="btn" data-a="new">+ منتج جديد</button><span class="mut">${DB.products.length} منتج</span></div>`+DB.products.map(p=>`<div class="pr${p.on?'':' off'}"><img src="${esc(p.img)}" alt="" onerror="this.style.visibility='hidden'"><div><b>${esc(p.n)}</b><small>${CAT[p.c]} · ${fmt(p.p)}${p.o?` (كان ${fmt(p.o)})`:''}${p.nw?' · جديد':''}${p.out?' · نفد':''}${p.on?'':' · مخفي'}</small>
+ <div class="acts"><button data-a="edit" data-id="${p.id}">تعديل</button><button data-a="out" data-id="${p.id}">${p.out?'رجّعه متوفر':'نفد'}</button><button data-a="vis" data-id="${p.id}">${p.on?'إخفاء':'إظهار'}</button><button class="dng" data-a="del" data-id="${p.id}">حذف</button></div></div></div>`).join('');
+}
+const loadImg=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=r.result};r.onerror=no;r.readAsDataURL(f)});
+function jpg(i,w){const c=document.createElement('canvas');c.width=Math.min(w,i.width);c.height=Math.round(i.height*c.width/i.width);c.getContext('2d').drawImage(i,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.82)}
+/* إزالة الخلفية: بتمسح اللون المتصل بحواف الصورة (بتشتغل أحسن مع خلفية سادة) وبتقصّ حوالين المنتج */
+function cutout(i,maxW){
+ const w=Math.min(maxW,i.width),h=Math.round(i.height*w/i.width),c=document.createElement('canvas');c.width=w;c.height=h;
+ const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(i,0,0,w,h);
+ const D=x.getImageData(0,0,w,h),a=D.data,N=w*h;let r=0,g=0,b=0,n=0;
+ const sm=(px,py)=>{const k=(py*w+px)*4;r+=a[k];g+=a[k+1];b+=a[k+2];n++};
+ for(let q=0;q<w;q++){sm(q,0);sm(q,h-1)}for(let q=0;q<h;q++){sm(0,q);sm(w-1,q)}
+ r/=n;g/=n;b/=n;
+ const isBg=k=>Math.abs(a[k]-r)+Math.abs(a[k+1]-g)+Math.abs(a[k+2]-b)<75,bg=new Uint8Array(N),st=new Int32Array(N);let sp=0;
+ const push=p=>{if(!bg[p]&&isBg(p*4)){bg[p]=1;st[sp++]=p}};
+ for(let q=0;q<w;q++){push(q);push((h-1)*w+q)}for(let q=0;q<h;q++){push(q*w);push(q*w+w-1)}
+ while(sp){const p=st[--sp],px=p%w;if(px>0)push(p-1);if(px<w-1)push(p+1);if(p>=w)push(p-w);if(p<N-w)push(p+w)}
+ let x0=w,y0=h,x1=0,y1=0,fg=0;
+ for(let y=0;y<h;y++)for(let q=0;q<w;q++){const p=y*w+q;
+  if(bg[p]){a[p*4+3]=0;continue}
+  fg++;if(q<x0)x0=q;if(q>x1)x1=q;if(y<y0)y0=y;if(y>y1)y1=y;
+  if((q>0&&bg[p-1])||(q<w-1&&bg[p+1])||(y>0&&bg[p-w])||(y<h-1&&bg[p+w]))a[p*4+3]=140}
+ if(fg<N*.06||fg>N*.96)return null;
+ x.putImageData(D,0,0);
+ const m=Math.round(w*.02),sx=Math.max(0,x0-m),sy=Math.max(0,y0-m),sw=Math.min(w-sx,x1-x0+2*m),sh=Math.min(h-sy,y1-y0+2*m),o=document.createElement('canvas');
+ o.width=sw;o.height=sh;o.getContext('2d').drawImage(c,sx,sy,sw,sh,0,0,sw,sh);return o.toDataURL('image/png');
+}
+async function prep(file,want){const i=await loadImg(file);if(want){const d=cutout(i,720);if(d)return{data:d,cut:true};toast('الخلفية مش سادة، اتحفظت الصورة زي ما هي')}return{data:jpg(i,800),cut:false}}
+const thumbs=(a,b)=>(a?`<img src="${esc(a)}" alt="">`:'')+(b?`<img src="${esc(b)}" alt="">`:'');
+function form(id){
+ const old=DB.products.find(x=>x.id===id),p=old||{c:'tees',n:'',p:'',o:'',nw:true,img:'',back:'',cut:false,rack:false,sizes:defSz('tees'),out:false,on:true},pend={};
+ const dlg=$('#dlg');
+ dlg.innerHTML=`<form class="fm"><h3>${old?'تعديل المنتج':'منتج جديد'}</h3>
+ <label>اسم المنتج<input name="n" required value="${esc(p.n)}"></label>
+ <label>القسم<select name="c">${Object.entries(CAT).map(([k,v])=>`<option value="${k}"${k===p.c?' selected':''}>${v}</option>`).join('')}</select></label>
+ <div class="two"><label>السعر (ج.م)<input name="p" type="number" min="0" required value="${esc(p.p)}"></label><label>السعر القديم (اختياري)<input name="o" type="number" min="0" value="${p.o||''}"></label></div>
+ <label>المقاسات (بينها فاصلة)<input name="sz" value="${esc(p.sizes.join(','))}"></label>
+ <div class="two"><label>صورة الوش<input type="file" name="ff" accept="image/*"></label><label>صورة الضهر (اختياري)<input type="file" name="fb" accept="image/*"></label></div>
+ <div class="chk"><label><input type="checkbox" name="cut" checked> إزالة الخلفية تلقائياً (الأفضل خلفية سادة)</label></div>
+ <div class="pvw" id="pvw">${thumbs(p.img,p.back)}</div>
+ <label>أو رابط صورة الوش<input name="img" value="${p.img.startsWith('data:')?'':esc(p.img)}" placeholder="https://..."></label>
+ <div class="chk"><label><input type="checkbox" name="nw"${p.nw?' checked':''}> جديد</label><label><input type="checkbox" name="out"${p.out?' checked':''}> نفد</label><label><input type="checkbox" name="on"${p.on?' checked':''}> ظاهر في الموقع</label><label><input type="checkbox" name="rack"${p.rack?' checked':''}> اعرضه على المعلّقة</label></div>
+ <div class="acts"><button class="btn">حفظ</button><button type="button" name="cx">إلغاء</button></div></form>`;
+ dlg.showModal();
+ const f=dlg.querySelector('form');
+ const pick=async(k,file)=>{if(!file)return;try{pend[k]=await prep(file,f.cut.checked);$('#pvw').innerHTML=thumbs(pend.f?pend.f.data:p.img,pend.b?pend.b.data:p.back);if(k==='f')f.rack.checked=pend.f.cut}catch(e){toast('تعذّر قراءة الصورة')}};
+ f.ff.onchange=e=>pick('f',e.target.files[0]);f.fb.onchange=e=>pick('b',e.target.files[0]);
+ f.cx.onclick=()=>dlg.close();
+ f.onsubmit=async e=>{
+  e.preventDefault();const bt=f.querySelector('.btn');bt.disabled=true;bt.textContent='جاري الحفظ...';
+  try{
+   const up=d=>api('POST','/api/admin/upload',{data:d}).then(r=>r.url);
+   const img=pend.f?await up(pend.f.data):(f.img.value.trim()||p.img),back=pend.b?await up(pend.b.data):p.back;
+   const sz=f.sz.value.split(',').map(x=>x.trim()).filter(Boolean),o={c:f.c.value,n:f.n.value.trim(),p:+f.p.value,o:+f.o.value||0,nw:f.nw.checked,out:f.out.checked,on:f.on.checked,rack:f.rack.checked,cut:pend.f?pend.f.cut:p.cut,sizes:sz.length?sz:defSz(f.c.value),img,back};
+   old?Object.assign(old,o):DB.products.unshift({id:uid(),...o});
+   await save();dlg.close();show('prod');toast('تم الحفظ وظهر في الموقع');
+  }catch(x){bt.disabled=false;bt.textContent='حفظ';toast('تعذّر الحفظ')}
+ };
+}
+
+/* ===== 3) الطلبات ===== */
+let draft=[];
+const MSG={'جديد':'استلمنا طلبك وهنأكد معاك العنوان والدفع.','مؤكد':'تم تأكيد طلبك وجاري تجهيزه.','تم الشحن':'طلبك اتشحن وهيوصلك خلال 2-4 أيام.','تم التسليم':'نتمنى القطع تعجبك! رأيك يهمنا.','ملغي':'تم إلغاء طلبك. لو محتاج أي مساعدة كلمنا.'};
+const waLink=o=>{let n=o.phone.replace(/\D/g,'');n=n.startsWith('20')?n:n.startsWith('0')?'2'+n:'20'+n;return 'https://wa.me/'+n+'?text='+encodeURIComponent(`أهلاً ${o.name} 👋\nطلبك رقم #${o.n} من ELZYN\n${MSG[o.st]}\nالإجمالي: ${fmt(o.total)}`)};
+const calcO=ds=>{const s=DB.settings,sub=ds.reduce((a,i)=>a+i.p*i.q,0),disc=$('#ocd')&&$('#ocd').checked?sub*s.pct/100:0,ship=!sub||sub>=s.free?0:s.ship;return{sub,disc,ship,total:sub-disc+ship}};
+function drawDraft(){
+ const box=$('#dl');if(!box)return;const t=calcO(draft);
+ box.innerHTML=draft.map((i,k)=>`<p class="row"><span>${esc(i.n)} (${esc(i.s)}) ×${i.q}</span><span>${fmt(i.p*i.q)} <button class="dng" data-a="rmi" data-k="${k}">✕</button></span></p>`).join('')+(draft.length?`<p class="row"><span>الشحن</span><span>${t.ship?fmt(t.ship):'مجاني'}</span></p><p class="row"><b>الإجمالي</b><b>${fmt(t.total)}</b></p>`:'');
+}
+function vOrd(){
+ return `<details><summary class="btn">+ تسجيل طلب جديد</summary><div class="fm">
+ <div class="two"><label>اسم العميل<input id="on"></label><label>رقم الموبايل<input id="op" inputmode="tel" placeholder="01xxxxxxxxx"></label></div>
+ <label>المحافظة<input id="oc"></label>
+ <div class="two3"><label>المنتج<select id="opr">${DB.products.map(p=>`<option value="${p.id}">${esc(p.n)}</option>`).join('')}</select></label><label>المقاس<input id="os" placeholder="M"></label><label>الكمية<input id="oq" type="number" min="1" value="1"></label></div>
+ <button type="button" class="ghost" data-a="add">+ أضف للطلب</button>
+ <label class="chk"><span><input type="checkbox" id="ocd"> العميل استخدم كود الخصم</span></label>
+ <div id="dl"></div><button class="btn" data-a="saveo">حفظ الطلب</button></div></details>
+ <div class="bar2"><span class="mut">${DB.orders.length} طلب</span><button class="ghost" data-a="csv">تصدير CSV</button></div>`+
+ (DB.orders.map(o=>`<div class="od"><div class="row"><b>#${o.n} · ${esc(o.name)}</b><small class="mut">${o.date}</small></div><small class="mut">${esc(o.phone)} · ${esc(o.city)}${o.address?' · '+esc(o.address):''}</small>
+ <p>${o.items.map(i=>`${esc(i.n)} (${esc(i.s)}) ×${i.q}`).join('، ')}</p>
+ <div class="row"><b>${fmt(o.total)}</b><select data-a="st" data-n="${o.n}">${ST.map(s=>`<option${s===o.st?' selected':''}>${s}</option>`).join('')}</select></div>
+ <div class="acts"><a class="btn btn--wa" target="_blank" rel="noopener" href="${waLink(o)}">رسالة واتساب للعميل</a><button class="dng" data-a="delo" data-n="${o.n}">حذف</button></div></div>`).join('')||'<p class="mut">مفيش طلبات متسجلة لسه.</p>');
+}
+
+/* ===== 4) الإعدادات ===== */
+function vSet(){
+ const s=DB.settings;
+ return `<h3>إعدادات المتجر</h3><div class="fm">
+ <div class="two"><label>مصاريف الشحن (ج.م)<input id="s_ship" type="number" min="0" value="${s.ship}"></label><label>شحن مجاني فوق (ج.م)<input id="s_free" type="number" min="0" value="${s.free}"></label></div>
+ <div class="two"><label>كود الخصم<input id="s_code" value="${esc(s.code)}"></label><label>نسبة الخصم %<input id="s_pct" type="number" min="0" max="90" value="${s.pct}"></label></div>
+ <div class="two"><label>رقم واتساب (دولي بدون +)<input id="s_wa" inputmode="numeric" value="${esc(s.wa)}"></label><label>الرقم المعروض في الموقع<input id="s_phone" value="${esc(s.phone)}"></label></div>
+ <label>الشريط الإعلاني المتحرك (سطر لكل رسالة)<textarea id="s_bar" rows="4">${esc(s.bar.join('\n'))}</textarea></label>
+ <button class="btn" data-a="sets">حفظ الإعدادات</button></div>`;
+}
+
+/* ===== 5) الحساب ===== */
+function vPub(){
+ return `<h3>تغيير كلمة السر</h3><div class="fm"><label>كلمة السر الحالية<input id="p0" type="password"></label><label>الجديدة (8 حروف على الأقل)<input id="p1" type="password"></label><button class="btn" data-a="pw">تغيير كلمة السر</button></div>
+ <h3>نسخة احتياطية</h3><p class="mut" style="margin-bottom:8px">بياناتك محفوظة على السيرفر في مجلد data. نزّل نسخة بشكل دوري.</p><button class="ghost" data-a="bak">تنزيل نسخة كاملة</button>`;
+}
+
+/* ===== التنقل والأحداث ===== */
+const VIEWS={dash:vDash,prod:vProd,ord:vOrd,set:vSet,pub:vPub};
+function show(t){if(!ready)return;tab=t;document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===t));$('#v').innerHTML=VIEWS[t]();if(t==='ord')drawDraft()}
+$('#tabs').onclick=e=>{const b=e.target.closest('button');if(b)show(b.dataset.t)};
+$('#pub').onclick=()=>api('POST','/api/logout').then(()=>location.reload());
+$('#v').addEventListener('click',e=>{
+ const b=e.target.closest('[data-a]');if(!b||b.tagName==='SELECT')return;
+ const a=b.dataset.a,p=DB.products.find(x=>x.id===b.dataset.id),n=+b.dataset.n;
+ if(a==='new')form();
+ else if(a==='edit')form(b.dataset.id);
+ else if(a==='out'){p.out=!p.out;save();show('prod')}
+ else if(a==='vis'){p.on=!p.on;save();show('prod')}
+ else if(a==='del'){if(confirm('تحذف "'+p.n+'" نهائياً؟')){DB.products=DB.products.filter(x=>x!==p);save();show('prod')}}
+ else if(a==='add'){
+  const pr=DB.products.find(x=>x.id===$('#opr').value);if(!pr)return;
+  draft.push({n:pr.n,s:$('#os').value.trim()||'-',q:Math.max(1,+$('#oq').value||1),p:pr.p});$('#os').value='';drawDraft();
+ }
+ else if(a==='rmi'){draft.splice(+b.dataset.k,1);drawDraft()}
+ else if(a==='saveo'){
+  const name=$('#on').value.trim();if(!name||!draft.length)return toast('اكتب اسم العميل وضيف منتج');
+  api('POST','/api/admin/orders',{name,phone:$('#op').value.trim(),city:$('#oc').value.trim(),items:draft,...calcO(draft)}).then(r=>{DB.orders=r.orders;draft=[];show('ord');badge();toast('تم حفظ الطلب')}).catch(()=>toast('تعذّر الحفظ'));
+ }
+ else if(a==='delo'){if(confirm('تحذف الطلب #'+n+'؟')){api('DELETE','/api/admin/orders/'+n).then(()=>{DB.orders=DB.orders.filter(o=>o.n!==n);show('ord');badge()})}}
+ else if(a==='csv'){
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  dl('orders.csv','\ufeff'+['رقم,التاريخ,الاسم,الموبايل,المحافظة,المنتجات,الإجمالي,الحالة',...DB.orders.map(o=>[o.n,o.date,o.name,o.phone,o.city,o.items.map(i=>`${i.n} (${i.s}) x${i.q}`).join(' | '),o.total,o.st].map(q).join(','))].join('\n'),'text/csv');
+ }
+ else if(a==='sets'){
+  const g=i=>$('#s_'+i).value.trim();
+  Object.assign(DB.settings,{ship:+g('ship')||0,free:+g('free')||0,code:g('code').toUpperCase(),pct:+g('pct')||0,wa:g('wa').replace(/\D/g,''),phone:g('phone'),bar:g('bar').split('\n').map(x=>x.trim()).filter(Boolean)});
+  save();toast('تم الحفظ وظهر في الموقع');
+ }
+ else if(a==='pubjs')pubJS();
+ else if(a==='pw'){api('POST','/api/admin/password',{old:$('#p0').value,new:$('#p1').value}).then(()=>{toast('تم تغيير كلمة السر');$('#p0').value=$('#p1').value=''}).catch(e=>toast(e.message))}
+ else if(a==='bak')dl('elzyn-backup-'+ld(Date.now())+'.json',JSON.stringify(DB),'application/json');
+ else if(a==='reset'){if(confirm('هيتمسح كل شيء (منتجات وطلبات وإعدادات). متأكد؟')){try{localStorage.removeItem('ez_admin')}catch(e){}location.reload()}}
+});
+$('#v').addEventListener('change',e=>{
+ const t=e.target;
+ if(t.dataset.a==='st'){const o=DB.orders.find(x=>x.n===+t.dataset.n);o.st=t.value;api('PATCH','/api/admin/orders/'+o.n,{st:t.value});show('ord');badge()}
+ else if(t.id==='ocd')drawDraft();
+ else if(t.id==='imp'&&t.files[0]){
+  const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.products)||!d.settings)throw 0;DB=d;DB.orders=DB.orders||[];save();show('pub');toast('تم استيراد النسخة')}catch(x){toast('الملف مش نسخة صالحة')}};r.readAsText(t.files[0]);
+ }
+});
+boot();
+</script>
+</body>
+</html>

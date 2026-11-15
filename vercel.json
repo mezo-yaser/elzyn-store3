@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "framework": null,
+  "functions": {
+    "api/[...route].js": {
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    { "source": "/data.js", "destination": "/api/data.js" },
+    { "source": "/uploads/:path*", "destination": "/api/uploads/:path*" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/ping", "destination": "/api/ping" },
+    { "source": "/health", "destination": "/api/health" }
+  ],
+  "headers": [
+    {
+      "source": "/admin.html",
+      "headers": [{ "key": "X-Frame-Options", "value": "DENY" }]
+    }
+  ]
+}
